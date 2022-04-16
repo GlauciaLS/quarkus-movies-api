@@ -1,0 +1,2 @@
+GET localhost:8080/movies/search/robocop
+Content-Type: application/json
