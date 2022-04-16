@@ -8,7 +8,10 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag
 import javax.ws.rs.core.Application
 
 @OpenAPIDefinition(
-    tags = [Tag(name = "movie", description = "Movies and Series")],
+    tags = [
+        Tag(name = "movie", description = "Movies and Series"),
+        Tag(name = "user", description = "Users")
+    ],
     info = Info(
         title = "Quarkus Movie API",
         version = "1.0.0",

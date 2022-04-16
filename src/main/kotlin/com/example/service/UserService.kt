@@ -1,5 +1,6 @@
 package com.example.service
 
+import com.example.exception.BusinessException
 import com.example.model.User
 import com.example.model.dto.UserDTO
 import com.example.repository.UserRepository
@@ -15,6 +16,7 @@ class UserService {
 
     @Transactional
     fun create(userDTO: UserDTO) {
+        if(userRepository.findByEmail(userDTO.email) != null) throw BusinessException("E-mail já cadastrado!")
         userRepository.persist(User(userDTO))
     }
 }
