@@ -1,10 +1,13 @@
 package com.example.resources
 
-import com.example.restclient.IMDBRestClient
 import com.example.restclient.model.MovieIMDB
-import org.eclipse.microprofile.config.inject.ConfigProperty
+import com.example.service.MovieService
+import org.eclipse.microprofile.openapi.annotations.Operation
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType
+import org.eclipse.microprofile.openapi.annotations.media.Content
+import org.eclipse.microprofile.openapi.annotations.media.Schema
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse
 import org.eclipse.microprofile.openapi.annotations.tags.Tag
-import org.eclipse.microprofile.rest.client.inject.RestClient
 import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -15,21 +18,22 @@ import javax.ws.rs.core.MediaType
 @Path("/movies")
 class MovieResource() {
 
-    @ConfigProperty(name = "x-rapidapi-key")
-    lateinit var xRapidApiKey: String;
-
-    @ConfigProperty(name = "x-rapidapi-host")
-    lateinit var xRapidApiHost: String;
-
     @Inject
-    @field: RestClient
-    internal lateinit var imdbRestClient: IMDBRestClient
+    lateinit var movieService: MovieService
 
     @Tag(name = "movie")
+    @Operation(summary = "Método para buscar filmes")
+    @APIResponse(responseCode = "200",
+        content = [Content(
+            mediaType = MediaType.APPLICATION_JSON,
+            schema = Schema(implementation = MovieIMDB::class, type = SchemaType.ARRAY)
+        )]
+    )
     @GET
     @Path("/search/{query}")
     @Produces(MediaType.APPLICATION_JSON)
-    fun hello(@PathParam("query") query: String): MovieIMDB {
-        return imdbRestClient.search(xRapidApiKey, xRapidApiHost, query)
+    fun search(@PathParam("query") query: String): MovieIMDB {
+        return movieService.search(query)
     }
+
 }
